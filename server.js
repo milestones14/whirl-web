@@ -4,11 +4,7 @@ import { spawn } from "child_process";
 const app = express();
 app.use(express.json());
 
-console.log("New version !!");
-
-app.post("/gen", (req, res) => {
-    const args = (req.body && req.body.args) ? req.body.args : [];
-
+function runWhirl(args, shouldParseFloat) {
     const p = spawn("./whirl", args);
 
     let out = "";
@@ -18,13 +14,28 @@ app.post("/gen", (req, res) => {
     p.stderr.on("data", d => err += d.toString());
 
     p.on("close", code => {
+        let valueToGive;
+        if (shouldParseFloat) {
+            valueToGive = parseFloat(out.replace("\n", "").trim());
+        } else {
+            valueToGive = out.replace("\n", "").trim();
+        }
+
         res.json({
-            exitCode: code,
-            stdout: out,
-            stderr: err
+            value: valueToGive,
         });
     });
+}
+
+
+app.post("/generate", (req, res) => {
+    runWhirl(["generate"], true);
 });
+
+app.post("/generateString", (req, res) => {
+    runWhirl(["generateString"], false);
+});
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
