@@ -4,6 +4,8 @@ import { spawn } from "child_process";
 const app = express();
 app.use(express.json());
 
+console.log("New version !!");
+
 app.post("/gen", (req, res) => {
     const args = req.body?.args ?? [];
 
