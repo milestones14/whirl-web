@@ -8,6 +8,10 @@ Make a POST request to `https://whirl-web.onrender.com`:
 > [!TIP]
 > These examples generate a standard 0-1 random float, but if you want to generate a 32-char string (as available in the CLI), just change the endpoint from '/generate' to '/generateString'
 
+> [!WARNING]
+> Currently, cold-starts can delay requests by 50 seconds or more.
+
+
 ### cURL
 ```bash
 curl -X POST https://whirl-web.onrender.com/generate \
